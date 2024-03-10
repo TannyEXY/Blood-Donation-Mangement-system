@@ -128,11 +128,3 @@ def initialiseDatabase():
     except Exception as message:
         print(message)
     
-        
-
-
-
-  
-
-
-
