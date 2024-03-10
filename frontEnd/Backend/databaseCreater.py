@@ -76,6 +76,7 @@ def createTables():
                     create table medical_donor(
                         medid int unique not null primary key,
                         donorid int not null,
+                        weight int not null,
                         illness varchar(255),
                         allergy varchar(255),
                         daterecorded date,
