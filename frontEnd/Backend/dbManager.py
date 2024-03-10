@@ -19,3 +19,23 @@ class loginDB():
         self.mycursor.execute(f"insert into users(user, pass) value('{username}','{password}');")
         self.mydb.commit()
 
+
+
+class patients():
+    mydb = mysql.connector.connect(
+    host = "localhost",
+    user="root",
+    passwd="root",
+    database="blooddonation" )
+
+
+    def __init__(self):
+        self.mycursor = self.mydb.cursor()
+        pass
+
+    def display(self):
+        self.mycursor.execute("select * from patients")
+        data = self.mycursor.fetchall()
+        return data
+
+
