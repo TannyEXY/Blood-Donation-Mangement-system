@@ -21,7 +21,7 @@ class main_Menu(customtkinter.CTk):
                                                 hover_color="#FF5002",bg_color='#161c25',cursor="hand2",corner_radius=15,width=200,height=80)
             self.donationMenu.place(x=200,y=130)
 
-            self.patientMenu = customtkinter.CTkButton(self,font=self.font1,text_color='#fff',text='Patients',
+            self.patientMenu = customtkinter.CTkButton(self,font=self.font1,text_color='#fff',text='Patients',command=self.patients,
                                                 hover_color="#FF5002",bg_color='#161c25',cursor="hand2",corner_radius=15,width=200,height=80)
             self.patientMenu.place(x=500,y=130)
 
@@ -58,6 +58,12 @@ class main_Menu(customtkinter.CTk):
              from userRegistration import Registration
              app = Registration()
              app.mainloop()
+
+        def patients(self):
+             self.destroy()
+             from patients import patientsMenu
+             app = patientsMenu()
+             app.mainloop() 
 
 
 #running the menu

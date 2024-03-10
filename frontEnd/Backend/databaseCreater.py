@@ -17,6 +17,7 @@ def createTables():
                     regnumber int auto_increment not null unique primary key,
                     name varchar(255) not null,
                     lname varchar(255),
+                    gender varchar(7),
                     dob date not null,
                     homeaddress varchar(255),
                     nationalid varchar(255),
