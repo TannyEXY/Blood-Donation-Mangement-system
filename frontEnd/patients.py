@@ -80,8 +80,8 @@ class patientsMenu(customtkinter.CTk):
 
            
       #  Frame table to show the results that will have been added
-       self.frame = customtkinter.CTkFrame(self, width=800, height=300, bg_color="grey")
-       self.frame.place(x=400, y=150)
+       self.frame = customtkinter.CTkScrollableFrame(self, width=850, height=300, bg_color=self.color, corner_radius=10)
+       self.frame.place(x=370, y=150)
 
        self.Tree = ttk.Treeview(self.frame, height= 19)
       #  defining the Columns name
@@ -184,8 +184,6 @@ class patientsMenu(customtkinter.CTk):
        
       #  diplaying the data in the list the moment the app opens
        self.displaylist()
-
-
 
    def Search(self):
        name = self.Namesearch.get()
