@@ -19,8 +19,6 @@ class loginDB():
         self.mycursor.execute(f"insert into users(user, pass) value('{username}','{password}');")
         self.mydb.commit()
 
-
-
 class patientsDB():
     mydb = mysql.connector.connect(
     host = "localhost",
@@ -65,12 +63,80 @@ class patientsDB():
 
     def updatePatient(self,datalist,regnumber):
         self.mycursor.execute(f'''
-                                update table patients set name ='{datalist[0]}', lname = '{datalist[1]}',
+                                update patients set name ='{datalist[0]}', lname = '{datalist[1]}',
                                 gender = '{datalist[2]}',phone = '{datalist[3]}',nationalid = '{datalist[4]}'
                                 ,dob ='{datalist[5]}', homeaddress = '{datalist[6]}' 
                                 where regnumber = {regnumber};
                               ''')
         self.mydb.commit()
 
+class diagnosisDB():
+    mydb = mysql.connector.connect(
+    host = "localhost",
+    user="root",
+    passwd="root",
+    database="blooddonation" )
+   
+    def __init__(self):
+        self.mycursor = self.mydb.cursor()
+
+    def searchDiagnosis(self,regnumber):
+        self.mycursor.execute(f'''
+                    select p.name, p.lname, p.gender,year(current_date()) - year(p.dob) as age,
+                        mp.illness, mp.bloodgroup,mp.prescriptions,Daterecorded as `date`, mp.medicalid,
+                        `condition`,allergy
+                    from patients as p left join medicals_patient as mp on mp.patientid = p.regnumber
+                    where p.regnumber = {str(regnumber)};
+                ''')
+        data = self.mycursor.fetchall()
+        return data
+    
+    def saveDiagnosis(self,data):
+        self.mycursor.execute(f'''
+                                insert into medicals_patient(patientid,bloodbankid,illness,bloodgroup,allergy,prescriptions,`condition`,DateRecorded)
+                                values({data[0]},'{data[1]}','{data[2]}','{data[3]}','{data[4]}','{data[5]}','{data[6]}','{data[7]}');
+                            ''')
+        self.mydb.commit()
+
+    def updateDiagnosis(self,data,medicalid):
+        self.mycursor.execute(f'''
+                                update medicals_patient set patientid = {data[0]} ,bloodbankid = '{data[1]}',illness = '{data[2]}',
+                                bloodgroup = '{data[3]}',allergy= '{data[4]}',prescriptions = '{data[5]}',`condition` = '{data[6]}',
+                                DateRecorded = '{data[7]}' where medicalid = '{medicalid}';
+                            ''')
+        self.mydb.commit()
+
+    
+    def searchBG(self, bloodgroup):
+        self.mycursor.execute(f'''
+                                select bloodbankid, bloodgroup, storage_location, amount from bloodbank
+                                where bloodgroup = '{bloodgroup}' and usedstate = False;
+                            ''')
+        data = self.mycursor.fetchall()
+        return data
+
+class nextkinDB():
+    mydb = mysql.connector.connect(
+                host = "localhost",
+                user="root",
+                passwd="root",
+                database="blooddonation" )
+    
+    def __init__(self):
+        self.mycursor = self.mydb.cursor()
 
 
+    def saveKin(self,data):
+        self.mycursor.execute("select max(regnumber)  from patients;")
+        records = self.mycursor.fetchall()
+        regnumber = 0
+        for set in records:
+            regnumber = set[0]
+                
+        self.mycursor.execute(f'''
+                                insert into nextofkin(patientid,name,lname,homeaddress,phone)
+                                values({regnumber},'{data[0]}','{data[1]}','{data[2]}','{data[3]}');
+                             ''')
+        self.mydb.commit()
+
+        

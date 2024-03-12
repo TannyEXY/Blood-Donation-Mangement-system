@@ -43,14 +43,13 @@ def createTables():
                         lname varchar(255),
                         homeaddress varchar(255),
                         phone varchar(255),
-                        primary key (kinid),
-                        foreign key (patientid) references patients(regnumber)
+                        primary key (kinid)
                         );
                 """,
                 "bloodbank":"""
                     create table bloodbank(
                         bloodbankid int unique auto_increment primary key,
-                        donorid int unique,
+                        donorid int,
                         bloodgroup varchar(4) not null,
                         storage_location varchar(255) not null,
                         daterecieved date,
@@ -60,16 +59,15 @@ def createTables():
                 """,
                 "medicals_patient":"""
                     create table medicals_patient(
-                        medicalid int not null primary key,
-                        patientid int unique,
+                        medicalid int not null auto_increment primary key,
+                        patientid int,
                         illness varchar(255),
                         bloodgroup varchar(255),
                         allergy varchar(255),
                         prescriptions varchar(255),
                         bloodbankid int,
-                        DateRecorded varchar(255),
-                        foreign key (patientid) references patients(regnumber),
-                        foreign key (bloodbankid) references bloodbank(bloodbankid)
+                        `condition` varchar(255),
+                        DateRecorded varchar(255)
                         );
                 """,
                 "medical_donor":"""
@@ -80,8 +78,7 @@ def createTables():
                         illness varchar(255),
                         allergy varchar(255),
                         daterecorded date,
-                        bloodgroup varchar(255),
-                        foreign key (donorid) references donor(regnumber)
+                        bloodgroup varchar(255)
                         );
                 """,
                 "users": """

@@ -69,14 +69,15 @@ class login(customtkinter.CTk):
         else:
             self.attempts -= 1
             if self.attempts == 0:
+                messagebox.showwarning("Blood Donation System",'Your attempts are exhausted! \nThe program is now closing.')
                 self.destroy()
             else:
-                messagebox.showwarning("Donation Management System",f"Incorrect password or username! {self.attempts} attempts left of 3.\nThe program will close after 3 failed attempts.")
+                messagebox.showwarning("Blood Donation System",f"Incorrect password or username! \n{self.attempts} attempts left of 3.\nThe program will close after 3 failed attempts.")
         
         # pass
 
     def close(self):
-        respose = messagebox.askyesno("Donations System", "Are you sure you wish to exit?")
+        respose = messagebox.askyesno("Blood Donation System", "Are you sure you wish to exit?")
         if respose == True:
             self.destroy()
 
