@@ -42,7 +42,7 @@ class main_Menu(customtkinter.CTk):
             self.reportsMenu.place(x=100,y=250)
 
             self.bloodrecordsMenu = customtkinter.CTkButton(self.frame,font=self.font1,text_color='#fff',text='Blood Records',
-                                                    hover_color='#161c25',cursor="hand2",corner_radius=15,width=200,height=80)
+                                                            command=self.bloodRecords, hover_color='#161c25',cursor="hand2",corner_radius=15,width=200,height=80)
             self.bloodrecordsMenu.place(x=400,y=250)
 
             self.logOut= customtkinter.CTkButton(self.frame,font=self.font1,text_color='#fff',text='Log out',hover_color='#161c25',
@@ -71,11 +71,20 @@ class main_Menu(customtkinter.CTk):
              app = Registration()
              app.mainloop()
 
+
         def patients(self):
              self.destroy()
              from patients import patientsMenu
              app = patientsMenu()
-             app.mainloop() 
+             app.mainloop()
+
+
+
+        def bloodRecords(self):
+            self.destroy()
+            from bloodbank import bloodbank
+            app = bloodbank()
+            app.mainloop()
 
 
 #running the menu

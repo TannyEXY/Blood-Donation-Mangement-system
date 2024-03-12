@@ -92,11 +92,19 @@ class diagnosisDB():
         return data
     
     def saveDiagnosis(self,data):
-        self.mycursor.execute(f'''
-                                insert into medicals_patient(patientid,bloodbankid,illness,bloodgroup,allergy,prescriptions,`condition`,DateRecorded)
+        query = (f'''insert into medicals_patient(patientid,bloodbankid,illness,bloodgroup,allergy,prescriptions,`condition`,DateRecorded)
                                 values({data[0]},'{data[1]}','{data[2]}','{data[3]}','{data[4]}','{data[5]}','{data[6]}','{data[7]}');
-                            ''')
+                ''')
+        self.mycursor.execute(query)
         self.mydb.commit()
+        if data[1] != 0:
+            query = f'update bloodbank set usedstate = True where bloodbankid = {data[1]};'
+            self.mycursor.execute(query)
+            self.mydb.commit()
+
+        
+
+
 
     def updateDiagnosis(self,data,medicalid):
         self.mycursor.execute(f'''
@@ -110,7 +118,7 @@ class diagnosisDB():
     def searchBG(self, bloodgroup):
         self.mycursor.execute(f'''
                                 select bloodbankid, bloodgroup, storage_location, amount from bloodbank
-                                where bloodgroup = '{bloodgroup}' and usedstate = False;
+                                where bloodgroup = '{bloodgroup}' and usedstate = 0;
                             ''')
         data = self.mycursor.fetchall()
         return data
@@ -139,4 +147,19 @@ class nextkinDB():
                              ''')
         self.mydb.commit()
 
-        
+class bloodBankDB():
+    mydb = mysql.connector.connect(
+                host = "localhost",
+                user="root",
+                passwd="root",
+                database="blooddonation" )
+    
+    def __init__(self):
+        self.mycursor = self.mydb.cursor()
+
+    def SaveBloodBank(self,data):
+        self.mycursor.execute(f'''
+                                insert into bloodbank(bloodgroup,storage_location,daterecieved,amount,usedstate)
+                                values('{data[0]}','{data[1]}','{data[2]}','{data[3]}', 0)
+                            ''')
+        self.mydb.commit()

@@ -282,6 +282,8 @@ class diagnosisCapture(customtkinter.CTk):
             self.lblresultAMT.configure(text=self.dashLines + 'ml' )
             self.bloodBankId = 0  
 
+            messagebox.showinfo('Blood Donation System', 'No records found Blood bank is empty.')
+
         # print(self.bloodBankId)
 
     def getData(self):
