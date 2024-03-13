@@ -163,3 +163,19 @@ class bloodBankDB():
                                 values('{data[0]}','{data[1]}','{data[2]}','{data[3]}', 0)
                             ''')
         self.mydb.commit()
+
+    
+    def search(self,bloodgroup):
+        self.mycursor.execute(f'''
+                                select b.bloodgroup, b.daterecieved, concat(d.name ,' ', d.lname), b.storage_location, b.amount 
+                                from bloodbank as b left join donor as d on d.regnumber = b.donorid
+                                where b.bloodgroup like '{bloodgroup}%';
+                            ''')
+        setsList = self.mycursor.fetchall()
+        data = []
+        for set in setsList:
+            data.append([set[0],set[1],set[2],set[3],set[4]])
+
+        return data
+        
+

@@ -23,19 +23,34 @@ class bloodbank(customtkinter.CTk):
         # Database Handler
         self.bloodbankDB_handler = bloodBankDB()
 
+        # Results Container
+        self.AV_BloodBanks_Data = []
+
+        self.pointer = 1
+
 
         # Frames 
         self.frameBKAdder = customtkinter.CTkFrame(self,width=430,height=270,bg_color=self.color, corner_radius=20)
-        self.frameBKAdder.place(x=20, y=60)
+        self.frameBKAdder.place(x=20, y=80)
 
         self.frameUSEDBK = customtkinter.CTkFrame(self,width=730,height=270,bg_color=self.color, corner_radius=20)
-        self.frameUSEDBK.place(x=460, y=60)
+        self.frameUSEDBK.place(x=460, y=80)
 
         self.frameAVBK = customtkinter.CTkFrame(self,width=880,height=270,bg_color=self.color, corner_radius=20)
-        self.frameAVBK.place(x=20, y=340)
+        self.frameAVBK.place(x=20, y=360)
 
         self.frameNavigator = customtkinter.CTkFrame(self,width=285,height=270,bg_color=self.color, corner_radius=20)
-        self.frameNavigator.place(x=910, y=340)
+        self.frameNavigator.place(x=910, y=360)
+
+        # Menu Label
+        self.lblmeasage = customtkinter.CTkLabel(self,text='Blood Bank',bg_color=self.color, text_color='#161C65',font=self.font4,
+                                                 corner_radius=100)
+        self.lblmeasage.place(x=400,y=5) 
+
+        # Message
+        self.lblmeasage = customtkinter.CTkLabel(self.frameUSEDBK,text='No Service yet!',font=self.font4,
+                                                 corner_radius=100)
+        self.lblmeasage.place(x=30,y=80) 
 
         #  Contained Frames
             # Available blood banks
@@ -44,7 +59,7 @@ class bloodbank(customtkinter.CTk):
             
 
         #  frame label
-        locations = [[30,60,'Blood bank'],[480,60,'Used blood banks'],[30,340,'Available Blood Banks']]
+        locations = [[30,80,'Blood bank'],[480,80,'Used blood banks'],[30,360,'Available Blood Banks']]
 
         for pnt in locations:
             self.framelbl = customtkinter.CTkLabel(self,text=pnt[2], bg_color=self.color,font=self.font1)
@@ -146,15 +161,56 @@ class bloodbank(customtkinter.CTk):
         self.lblresults = customtkinter.CTkLabel(self.frameAVBKSearch, text='0',font=self.font2)
         self.lblresults.place(x=200,y=140)
 
+        # Searched Results
+            # labels
+        labelnames = [[30,50, 'Blood Group :'], [240,50,'Location :'],
+                     [30,100,'Date :'], [240,100,'Amount :'],
+                     [30,150,"Donor's Full Name :"]]
         
+        for label in labelnames:
+            self.lblBloodGroup = customtkinter.CTkLabel(self.frameAVBKResults, text=label[2],font=self.font2)
+            self.lblBloodGroup.place(x=label[0],y=label[1])
+
+        self.lblBGResult = customtkinter.CTkLabel(self.frameAVBKResults,text= '- - - - - - - - - - -',font=self.font2)
+        self.lblBGResult.place(x=140,y=50)
+        
+        self.lblDate = customtkinter.CTkLabel(self.frameAVBKResults,text= '- - - - - - - - - - -',font=self.font2)
+        self.lblDate.place(x=140,y=100)
+        
+        self.lblDonorname = customtkinter.CTkLabel(self.frameAVBKResults,text= '- - - - - - - - - - -',font=self.font2)
+        self.lblDonorname.place(x=145,y=150)
+        
+        self.lbllocationResult = customtkinter.CTkLabel(self.frameAVBKResults,text= '- - - - - - - - - - -',font=self.font2)
+        self.lbllocationResult.place(x=320,y=50)
+        
+        self.lblamount = customtkinter.CTkLabel(self.frameAVBKResults,text= '- - - - - - - - - - -',font=self.font2)
+        self.lblamount.place(x=320,y=100)
+       
+
+            # buttons
+        self.prev = customtkinter.CTkButton(self.frameAVBKResults,text= 'Prev',font=self.font2,width=60,
+                                            command=self.Prev,corner_radius=20)
+        self.prev.place(x=300,y=150)
+
+        self.next = customtkinter.CTkButton(self.frameAVBKResults,text= 'Next',font=self.font2,width=60,
+                                            command=self.Next,corner_radius=20)
+        self.next.place(x=364,y=150)
 
 
+        self.lbl_Value_Setter= [self.lblBGResult,
+                                self.lblDate,
+                                self.lblDonorname,
+                                self.lbllocationResult,
+                                self.lblamount]
+        
+        
         # textbox
         self.txtBGSearch = customtkinter.CTkEntry(self.frameAVBKSearch, textvariable=self.BG_value)
         self.txtBGSearch.place(x=120,y=60)
 
         # Button
-        self.btnSearch = customtkinter.CTkButton(self.frameAVBKSearch, text='Search',width=80,corner_radius=20)
+        self.btnSearch = customtkinter.CTkButton(self.frameAVBKSearch, text='Search',width=80,
+                                                 command=self.searchAVBloodGroup,corner_radius=20)
         self.btnSearch.place(x=180,y=100)
 
 
@@ -162,10 +218,82 @@ class bloodbank(customtkinter.CTk):
 
 
 
+    # Load Data
+    def LoadData(self,record):
+        i = 0
+        for label in self.lbl_Value_Setter:
+            text = record[i]
+            if i == 4:
+                text = f'{text} ml'
+            label.configure(text=text)
+           
+            i+=1
+    
+    # clear Labels
+    def ClearLabels(self):
+        text = '- - - - - - - - - - -'
+        for label in self.lbl_Value_Setter:
+            label.configure(text=text)
 
 
+    # next
+    def Next(self):
+        p = self.pointer
+        data = self.AV_BloodBanks_Data
+        
+        if len(data) == 0:
+            messagebox.showinfo('Blood Donation System',
+                       'Info! \nNo record ere found.')
+            return
+
+        if p < len(data):
+            self.ClearLabels()
+            self.pointer += 1
+            self.LoadData(data[p])
+        else:
+            messagebox.showinfo('Blood Donation System',
+                       "Info! \nYou have reached the last result.")
+
+    # Prev
+    def Prev(self):
+        data = self.AV_BloodBanks_Data
+        if len(data) == 0:
+            messagebox.showinfo('Blood Donation System',
+                       'Info! \nNo record ere found.')
+            return
+
+        if self.pointer > 1:
+            self.ClearLabels()
+            self.pointer -= 1
+            p = self.pointer
+            self.LoadData(data[p-1])
+        else:
+            messagebox.showinfo('Blood Donation System',
+                       "Info! \nThis is the first result.")
 
 
+    # Search
+    def searchAVBloodGroup(self):
+
+        bloodgroup = self.BG_value.get()
+        
+        self.pointer = 1
+
+        self.AV_BloodBanks_Data = self.bloodbankDB_handler.search(bloodgroup)
+        
+        data = self.AV_BloodBanks_Data
+
+
+        self.lblresults.configure(text=f'{len(data)}')
+
+        if len(data) == 0:
+            self.ClearLabels()
+            return
+
+        # loading data at position {p?}
+        p = self.pointer
+
+        self.LoadData(data[p - 1])
 
     # Get data
     def getData(self):
@@ -185,7 +313,6 @@ class bloodbank(customtkinter.CTk):
         finally:
             self.Data = []
         
-
     # Clear
     def ClearText(self):
         i = 0

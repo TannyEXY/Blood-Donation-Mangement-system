@@ -26,6 +26,8 @@ class Registration(customtkinter.CTk):
         self.password = StringVar()
         self.cpassword = StringVar()
 
+        self.tempUsername = ''
+
 
         self.logo = customtkinter.CTkLabel(self,font=self.font2,text="User Registration",bg_color="#161C25")
         self.logo.place(x=120,y=50)
@@ -64,6 +66,8 @@ class Registration(customtkinter.CTk):
         self.resultlabel = customtkinter.CTkLabel(self,font=self.font5,bg_color="#161C25", text="")
         self.resultlabel.place(x=1,y=1)
 
+        print(self.tempUsername)
+
 
     def createMessageLabel(self, message, x1=100, y1=280, colour="red"):
         self.resultlabel = customtkinter.CTkLabel(self,font=self.font5,text=f"{message}",bg_color="#161C25",text_color=colour)
@@ -88,29 +92,14 @@ class Registration(customtkinter.CTk):
                 self.resultlabel.place(x=100,y=280)
                 
 
-        # data = self.userDB.getLogInDeatails(username,password)
-        # if len(data) > 0:
-        #     self.destroy()
-        #     from mainMenu import main_Menu
-        #     self.app = main_Menu()
-        #     self.app.mainloop()
-        # else:
-        #     self.attempts -= 1
-        #     if self.attempts == 0:
-        #         self.destroy()
-        #     else:
-        #         messagebox.showwarning("Donation Management System",f"Incorrect password or username! {self.attempts} attempts left of 3.\nThe program will close after 3 failed attempts.")
-        
-        # pass
-
     def close(self):
-        # respose = messagebox.askyesno("Donations System", "Are you sure you wish to go back?")
-        # if respose == True:
-        #     self.destroy()
-        self.destroy()
-        from mainMenu import main_Menu
-        app = main_Menu()
-        app.mainloop()
+        respose = messagebox.askyesno("Donations System", "Are you sure you wish to go back?")
+        print(self.tempUsername)
+        if respose == 1:
+            self.destroy()
+            from mainMenu import main_Menu
+            app = main_Menu()
+            app.mainloop()
 
 
 

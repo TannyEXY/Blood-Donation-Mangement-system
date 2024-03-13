@@ -17,6 +17,12 @@ class main_Menu(customtkinter.CTk):
             self.font2 = ("Arial",12,'bold')
             self.font4= ("Arial",60,'bold')
             self.color = "#161C25"
+
+
+            self.tempUsername = ''
+
+
+
             # Frames
             self.frame1 = customtkinter.CTkFrame(self,bg_color=self.color,width=700,height=480,corner_radius=200)
             self.frame1.place(x=105,y=-380)
@@ -37,7 +43,7 @@ class main_Menu(customtkinter.CTk):
                                                 hover_color='#161c25',cursor="hand2",corner_radius=15,width=200,height=80)
             self.patientMenu.place(x=400,y=130)
 
-            self.reportsMenu = customtkinter.CTkButton(self.frame,font=self.font1,text_color='#fff',text='Reports',
+            self.reportsMenu = customtkinter.CTkButton(self.frame,font=self.font1,text_color='#fff',text='Reports',command=self.Reports,
                                                 hover_color='#161c25',cursor="hand2",corner_radius=15,width=200,height=80)
             self.reportsMenu.place(x=100,y=250)
 
@@ -53,8 +59,6 @@ class main_Menu(customtkinter.CTk):
                                             cursor="hand2",corner_radius=50,width=100,height=50, command=self.userReg)
             self.userMenu.place(x=300,y=35)
 
-
-
         #Creating the funtionalities of the Buttons
         def logout(self):
             response = messagebox.askyesno("Blood Donation System", "Are you sure, you want to log out?")
@@ -69,6 +73,7 @@ class main_Menu(customtkinter.CTk):
              self.destroy()
              from userRegistration import Registration
              app = Registration()
+             app.tempUsername = self.tempUsername
              app.mainloop()
 
 
@@ -85,6 +90,10 @@ class main_Menu(customtkinter.CTk):
             from bloodbank import bloodbank
             app = bloodbank()
             app.mainloop()
+
+        
+        def Reports(self):
+             messagebox.showinfo('Blood Donation System', 'Design for this menu has not yet been planned.')
 
 
 #running the menu

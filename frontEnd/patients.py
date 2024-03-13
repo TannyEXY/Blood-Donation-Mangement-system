@@ -18,6 +18,7 @@ class patientsMenu(customtkinter.CTk):
 
        self.font1 = ("Arial",20,'bold')
        self.font2 = ("Arial",12,'bold')
+       self.font4= ("Arial",60,'bold')
 
       #  frames
        self.framePatient = customtkinter.CTkFrame(self, width=345, height=400)
@@ -29,6 +30,10 @@ class patientsMenu(customtkinter.CTk):
        self.framebtn = customtkinter.CTkFrame(self, width=530, height=130)
        self.framebtn.place(x=380, y=560)
 
+      # Menu tag
+       self.lblmeasage = customtkinter.CTkLabel(self,text='Patients',bg_color=self.color, text_color='#161C65',font=self.font4,
+                                                 corner_radius=100)
+       self.lblmeasage.place(x=400,y=5) 
 
       #  frame labels
        self.framelbl =customtkinter.CTkLabel(self,text="Patient",font=self.font1,bg_color=self.color)
@@ -174,27 +179,27 @@ class patientsMenu(customtkinter.CTk):
 
 
       # buttons
-       self.Addbtn = customtkinter.CTkButton(self.framebtn, text="ADD NEW", bg_color= self.color,font=self.font1,command=self.AddNewPatient,
+       self.Addbtn = customtkinter.CTkButton(self.framebtn, text="ADD NEW", bg_color= self.color,font=self.font2,command=self.AddNewPatient,
                                              cursor="hand2")
        self.Addbtn.place(x=50,y=20)
 
-       self.Savebtn = customtkinter.CTkButton(self.framebtn, text="SAVE", bg_color= self.color,font=self.font1,command=self.saveData,
+       self.Savebtn = customtkinter.CTkButton(self.framebtn, text="SAVE", bg_color= self.color,font=self.font2,command=self.saveData,
                                               cursor="hand2")
        self.Savebtn.place(x=200,y=20)
 
-       self.Updatebtn = customtkinter.CTkButton(self.framebtn, text="UPDATE", bg_color= self.color,font=self.font1,command=self.updateData,
+       self.Updatebtn = customtkinter.CTkButton(self.framebtn, text="UPDATE", bg_color= self.color,font=self.font2,command=self.updateData,
                                                 cursor="hand2")
        self.Updatebtn.place(x=350,y=20)
 
-       self.Cancelbtn = customtkinter.CTkButton(self.framebtn, text="Cancel", bg_color= self.color,font=self.font1,command=self.cancel,
+       self.Cancelbtn = customtkinter.CTkButton(self.framebtn, text="Cancel", bg_color= self.color,font=self.font2,command=self.cancel,
                                                 cursor="hand2")
        self.Cancelbtn.place(x=50,y=70)
 
-       self.logoutbtn = customtkinter.CTkButton(self.framebtn, text="Log out", bg_color= self.color,font=self.font1,command=self.logout,
+       self.logoutbtn = customtkinter.CTkButton(self.framebtn, text="Log out", bg_color= self.color,font=self.font2,command=self.logout,
                                                 cursor="hand2")
        self.logoutbtn.place(x=200,y=70)
 
-       self.Backbtn = customtkinter.CTkButton(self.framebtn, text="Back", bg_color= self.color,font=self.font1, command= self.mainMenu
+       self.Backbtn = customtkinter.CTkButton(self.framebtn, text="Back", bg_color= self.color,font=self.font2, command= self.mainMenu
                                               ,cursor="hand2")
        self.Backbtn.place(x=350,y=70)
 
@@ -205,7 +210,8 @@ class patientsMenu(customtkinter.CTk):
                                                  bg_color= self.color,font=self.font2,cursor="hand2")
        self.Deletebtn.place(x=900,y=100)
 
-       self.AddKinbtn = customtkinter.CTkButton(self, text="Next of Kin", height=20,width=60, bg_color= self.color,font=self.font2,cursor="hand2")
+       self.AddKinbtn = customtkinter.CTkButton(self, text="Next of Kin", height=20,width=60,command=self.nextofkin,
+                                                 bg_color= self.color,font=self.font2,cursor="hand2")
        self.AddKinbtn.place(x=965,y=100)
 
        self.diagnosisbtn = customtkinter.CTkButton(self, text="Diagnosis", height=20,width=60,command=self.diagnosis,
@@ -246,6 +252,10 @@ class patientsMenu(customtkinter.CTk):
        
       #  diplaying the data in the list the moment the app opens
        self.displaylist()
+
+
+   def nextofkin(self):
+      messagebox.showinfo('Blood Donation System', 'Menu Not designed yet!')
 
    def Search(self):
        name = self.Namesearch.get()

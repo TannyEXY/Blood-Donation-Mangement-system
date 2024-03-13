@@ -21,10 +21,16 @@ class diagnosisCapture(customtkinter.CTk):
         self.font1 = ("Arial",20,'bold')
         self.font2 = ("Arial",12,'bold')
         self.font3 = ("Arial",11,'bold')
+        self.font4= ("Arial",60,'bold')
 
         self.createDiagnosticsDetails()
         self.createbloodbankDetails()
         self.searchPatients()
+
+        # Menu tag
+        self.lblmeasage = customtkinter.CTkLabel(self,text='Diagnosis',bg_color=self.color, text_color='#161C65',font=self.font4,
+                                                    corner_radius=100)
+        self.lblmeasage.place(x=400,y=5) 
 
 
         # variables
