@@ -35,7 +35,7 @@ class main_Menu(customtkinter.CTk):
             self.lbl.place(x=200,y=390)
 
             #Creating the Buttons that will navigate the system
-            self.donationMenu = customtkinter.CTkButton(self.frame,font=self.font1,text_color='#fff',text='Donations',
+            self.donationMenu = customtkinter.CTkButton(self.frame,font=self.font1,text_color='#fff',text='Donations',command=self.donation,
                                                 hover_color='#161c25',cursor="hand2",corner_radius=15,width=200,height=80)
             self.donationMenu.place(x=100,y=130)
 
@@ -91,6 +91,11 @@ class main_Menu(customtkinter.CTk):
             app = bloodbank()
             app.mainloop()
 
+        def donation(self):
+             self.destroy()
+             from donation import donation
+             app = donation()
+             app.mainloop()
         
         def Reports(self):
              messagebox.showinfo('Blood Donation System', 'Design for this menu has not yet been planned.')
