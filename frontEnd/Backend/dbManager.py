@@ -164,6 +164,19 @@ class bloodBankDB():
                             ''')
         self.mydb.commit()
 
+    def SaveBloodBanknDonor(self,data, regnumber=0):
+        if regnumber == 0:
+            self.mycursor.execute("select max(regnumber) from donor;")
+            records = self.mycursor.fetchall()
+            regnumber = 0
+            for set in records:
+                regnumber = set[0] 
+    
+        self.mycursor.execute(f'''
+                                insert into bloodbank(donorid, bloodgroup,storage_location,daterecieved,amount,usedstate)
+                                values('{regnumber}','{data[0]}','{data[1]}','{data[2]}','{data[3]}', 0)
+                            ''')
+        self.mydb.commit()
     
     def search(self,bloodgroup):
         self.mycursor.execute(f'''
@@ -177,5 +190,55 @@ class bloodBankDB():
             data.append([set[0],set[1],set[2],set[3],set[4]])
 
         return data
+
+class donorDB():
+    mydb = mysql.connector.connect(
+                host = "localhost",
+                user="root",
+                passwd="root",
+                database="blooddonation" )
+    
+    def __init__(self):
+        self.mycursor = self.mydb.cursor()
+
+
+    def saveDonor(self,datalist, donorDiagnostics):
         
+        self.mycursor.execute(f'''
+                                insert into donor(name,lname,gender,phone,nationalid,dob,homeaddress)
+                                values('{datalist[0]}','{datalist[1]}', '{datalist[2]}','{datalist[3]}',
+                                '{datalist[4]}','{datalist[5]}','{datalist[6]}');
+                              ''')
+        self.mydb.commit()
+
+        self.mycursor.execute("select max(regnumber)  from donor;")
+        records = self.mycursor.fetchall()
+        regnumber = 0
+        for set in records:
+            regnumber = set[0]
+
+        data = donorDiagnostics
+        query = (f'''insert into medical_donor(donorid,illness,bloodgroup,DateRecorded,weight,allergy)
+                                values({regnumber},'{data[0]}','{data[1]}','{data[2]}','{data[3]}','{data[4]}');
+                ''')
+        self.mycursor.execute(query)
+        self.mydb.commit()
+
+        return regnumber
+
+    def getDonor(self,regnumber):
+        self.mycursor.execute(f'''select concat(d.name, ' ', d.lname), d.gender,bb.daterecieved ,d.phone 
+                                from donor as d left join bloodbank as bb on d.regnumber = bb.donorid
+                                where d.regnumber = '{regnumber}'  and  
+                                bb.daterecieved = (select max(bb.daterecieved) from bloodbank as bb where bb.donorid = '{regnumber}');''')
+        setsList = self.mycursor.fetchall()
+        data = []
+        for set in setsList:
+            data.append([set[0],set[1],set[2],set[3]])
+        if len(data) > 0:
+            return data[0]
+        else:
+            return []
+        
+
 

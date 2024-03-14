@@ -253,7 +253,6 @@ class patientsMenu(customtkinter.CTk):
       #  diplaying the data in the list the moment the app opens
        self.displaylist()
 
-
    def nextofkin(self):
       messagebox.showinfo('Blood Donation System', 'Menu Not designed yet!')
 

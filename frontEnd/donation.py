@@ -5,6 +5,7 @@ from tkinter import ttk
 import tkinter as tk
 from tkinter import messagebox
 import mainMenu
+from Backend.dbManager import donorDB,bloodBankDB
 
 
 class donation(customtkinter.CTk):
@@ -21,6 +22,14 @@ class donation(customtkinter.CTk):
         self.font2 = ("Arial",12,'bold')
         self.font4= ("Arial",60,'bold')
         self.font3 = ("Arial",11,'bold')
+
+        # data variables
+        self.donorData = []
+        self.bloodBankData = []
+        self.diagnosisData = []
+
+        self.donationDB_hanler = donorDB()
+        self.bloodBankDB_Handler = bloodBankDB()
 
         # Frames
         self.frameContainer = customtkinter.CTkFrame(self,bg_color=self.color,width=1000,height=710,corner_radius=50)
@@ -50,13 +59,18 @@ class donation(customtkinter.CTk):
         self.createBloodBankDetails()
         self.createButtons()
 
+        self.lblsave = customtkinter.CTkLabel(self.frameDiagnosis,text= '',font=self.font3
+                                                 )
+        self.lblsave.place(x=20,y=300)
 
     def createButtons(self):
-        self.btnSave = customtkinter.CTkButton(self.frameDiagnosis,text='Save\nRecord',corner_radius=15,font=self.font2,width=70
+        self.btnSave = customtkinter.CTkButton(self.frameDiagnosis,text='Save\nRecord',corner_radius=15,command=self.save,
+                                               font=self.font2,width=70
                                                  )
         self.btnSave.place(x=460, y=340)
 
-        self.btnDonate = customtkinter.CTkButton(self.frameButtons,text='Donate\nBlood',corner_radius=15,font=self.font2,width=70
+        self.btnDonate = customtkinter.CTkButton(self.frameButtons,text='Donate\nBlood',corner_radius=15,command=self.donate,
+                                                 font=self.font2,width=70
                                                  )
         self.btnDonate.place(x=300, y=100)
 
@@ -79,7 +93,7 @@ class donation(customtkinter.CTk):
         # Varibles for the textboxes
         self.txtname = StringVar()
         self.txtlname = StringVar()
-        self.txtgender = StringVar()
+        self.txtgender = ''
         self.txtphone = StringVar()
         self.txtnationid = StringVar()
         self.txtdob = StringVar()
@@ -100,6 +114,7 @@ class donation(customtkinter.CTk):
                 self.textbox[num].place(x=135,y=y_axis)
                 self.textbox[num].configure(values=["Male", "Female"])
                 self.textbox[num].set("Select")
+                self.textboxvariables[num]=self.textbox[num] 
                 y_axis += 50
                 continue
             if num == 5:
@@ -118,7 +133,8 @@ class donation(customtkinter.CTk):
             self.textbox[num].place(x=135,y=y_axis)
             y_axis += 50
 
-        self.btnClear = customtkinter.CTkButton(self.frameDonor,text='Clear',corner_radius=15,font=self.font2,width=70)
+        self.btnClear = customtkinter.CTkButton(self.frameDonor,text='Clear',corner_radius=15,command=self.clearDonorText,
+                                                font=self.font2,width=70)
         self.btnClear.place(x=266, y=365)
 
 
@@ -129,7 +145,7 @@ class donation(customtkinter.CTk):
 
         self.bloodBankId = 0
 
-        labelnames = ['Condition :','illness :','Blood group :', 'Date Recorded :','Prescription :','Allergy :']
+        labelnames = ['illness :','Blood group :', 'Date Recorded :','Weight :','Allergy :']
 
         column = 0
         x = 10
@@ -147,42 +163,43 @@ class donation(customtkinter.CTk):
             x += 260
             column += 1
 
-        self.condition = StringVar()
+       
         self.illness = StringVar()
         self.bloodgroup = StringVar()
         self.daterecorded = StringVar()
-        self.prescription = StringVar()
+        self.weight = StringVar()
         self.allergy = StringVar()
 
 
+
+
         # Creating textboxes
-        self.txtcondition = customtkinter.CTkEntry(self.frameDiagnosis, width=160,font=self.font3, bg_color=self.color
-                                                   ,textvariable=self.condition)
-        self.txtcondition.place(x = 100,y=100)
 
         self.txtillness = customtkinter.CTkEntry(self.frameDiagnosis, width=160,font=self.font3, bg_color=self.color
                                                  ,textvariable=self.illness)
-        self.txtillness.place(x = 370,y=100)
+        self.txtillness.place(x = 105,y=100)
 
         self.txtbloodgroup = customtkinter.CTkEntry(self.frameDiagnosis, width=160,font=self.font3, bg_color=self.color
                                                     ,textvariable=self.bloodgroup)
-        self.txtbloodgroup.place(x = 100,y=180)
+        self.txtbloodgroup.place(x = 370,y=100)
 
         self.txtdaterecorded = customtkinter.CTkEntry(self.frameDiagnosis, width=160,font=self.font3, bg_color=self.color
                                                       ,textvariable=self.daterecorded)
-        self.txtdaterecorded.place(x = 370,y=180)
+        self.txtdaterecorded.place(x = 105,y=180)
+        self.daterecorded.set('yyyy-mm-dd')
         
 
-        self.txtpresciption = customtkinter.CTkEntry(self.frameDiagnosis, width=160,font=self.font3, bg_color=self.color
-                                                     ,textvariable=self.prescription)
-        self.txtpresciption.place(x = 100,y=260)
+        self.txtweight = customtkinter.CTkEntry(self.frameDiagnosis, width=160,font=self.font3, bg_color=self.color
+                                                     ,textvariable=self.weight)
+        self.txtweight.place(x = 370,y=180)
 
         self.txtallergy = customtkinter.CTkEntry(self.frameDiagnosis, width=160,font=self.font3, bg_color=self.color
                                                       ,textvariable=self.allergy)
-        self.txtallergy.place(x = 370,y=260)
+        self.txtallergy.place(x = 105,y=260)
 
         # button
-        self.btnClear = customtkinter.CTkButton(self.frameDiagnosis,text='Clear',corner_radius=15,font=self.font2,width=70)
+        self.btnClear = customtkinter.CTkButton(self.frameDiagnosis,text='Clear',corner_radius=15,command=self.cleardiagnosisText,
+                                                font=self.font2,width=70)
         self.btnClear.place(x=460, y=300)
 
     def createBloodBankDetails(self):
@@ -192,7 +209,7 @@ class donation(customtkinter.CTk):
         self.BDate = StringVar()
         self.BAMT = StringVar()
 
-        self.txtvariables=[ self.BG ,
+        self.txtBBvariables=[ self.BG ,
                             self.BL,
                             self.BDate,
                             self.BAMT]
@@ -214,12 +231,15 @@ class donation(customtkinter.CTk):
         
         y_axis = 35
         for i in range(4):
-            self.txtbox[i] = customtkinter.CTkEntry(self.frameBloodBank, width=200,corner_radius=10,textvariable=self.txtvariables[i])
+            self.txtbox[i] = customtkinter.CTkEntry(self.frameBloodBank, width=200,corner_radius=10,
+                                                    textvariable=self.txtBBvariables[i])
             self.txtbox[i].place(x=200,y=y_axis)
             y_axis += 50
+        self.BDate.set('yyyy-mm-dd')
 
         # button
-        self.btnClear = customtkinter.CTkButton(self.frameBloodBank,text='Clear',corner_radius=15,font=self.font2,width=70)
+        self.btnClear = customtkinter.CTkButton(self.frameBloodBank,text='Clear',corner_radius=15,font=self.font2,width=70,
+                                                command=self.clearBloodbanktext)
         self.btnClear.place(x=410, y=184)          
 
     def createDonorSearchResults(self):
@@ -247,7 +267,8 @@ class donation(customtkinter.CTk):
         self.txtDonorname = customtkinter.CTkEntry(self.frameButtons,width=140,textvariable=self.txtDonorSearch)
         self.txtDonorname.place(x=140,y=20)
 
-        self.btnDonorsearch = customtkinter.CTkButton(self.frameButtons,text='Search',width=60,corner_radius=15)
+        self.btnDonorsearch = customtkinter.CTkButton(self.frameButtons,text='Search',command=self.searchDonor
+                                                      ,width=60,corner_radius=15)
         self.btnDonorsearch.place(x=205,y=50)
 
         y = 80
@@ -257,11 +278,121 @@ class donation(customtkinter.CTk):
             self.lblData[i].place(x=110,y=y)
             y += 30
 
+   
+   
+   
+    def getDonorData(self):
+        # "First Name :", "Last Name :","Gender :", "Phone :","National ID :","Date of Birth :","Home Address :"
+        
+        for textbox in self.textboxvariables:
+                self.donorData.append(textbox.get())
 
-    def cleartext(self):
-        for i in range(len()):
+    def getBloodBankData(self):
+        # 'Blood Group :','Location :','Date :', 'Amount :'
+        self.bloodBankData = []
+        for value in self.txtBBvariables:
+            self.bloodBankData.append(value.get())
+
+    def getDiagnosisData(self):
+        # 'illness :','Blood group :', 'Date Recorded :','weight :','Allergy :'
+        
+        data = [
+                self.illness,
+                self.bloodgroup,
+                self.daterecorded,
+                self.weight,
+                self.allergy
+                ]
+        
+        for value in data:
+            self.diagnosisData.append(value.get())
+            
+    def setData(self,data):
+        
+        for i in range(len(data)):
+            self.lblData[i].configure(text = data[i])
+
+    def searchDonor(self):
+        regnumber =  self.txtDonorSearch.get()
+        data = self.donationDB_hanler.getDonor(regnumber)
+        print(data)
+        if len(data) > 0:
+            self.setData(data)
+        else:
+            self.clearSearchtext()
+
+
+    def donate(self):
+        regnumber =  self.txtDonorSearch.get()
+        self.getBloodBankData()
+        data = []
+        if regnumber.isnumeric() and int(regnumber) > 0:
+            data = self.bloodBankData
+            self.bloodBankDB_Handler.SaveBloodBanknDonor(data,regnumber)
+            messagebox.showinfo("Blood Donation System",'The donor has successfully Donated blood')
+            print(data)
+        
+        # self.bloodBankDB_Handler.SaveBloodBank(data,regnumber) 
+
+    def clearSearchtext(self):
+        for i in range(len(self.lblData)):
             self.lblData[i].configure(text = '- - - - - - - - - - - - -')
 
+    def cleardiagnosisText(self):
+        data = [
+                self.illness,
+                self.bloodgroup,
+                self.daterecorded,
+                self.weight,
+                self.allergy
+                ]
+        num = 0
+        for value in data:
+            if num == 2:
+                data[num].set('yyyy-mm-dd')
+            else:
+                value.set('')
+            num += 1
+        self.lblsave.columnconfigure(text='')
+    
+    def clearBloodbanktext(self):
+        num = 0
+        for value in self.txtBBvariables:
+            if num == 2:
+                value.set('yyyy-mm-dd')
+            else:
+                value.set('')
+            num += 1
+
+    def clearDonorText(self):
+        num = 0
+        for textbox in self.textboxvariables:
+            if num == 2:
+                self.textbox[num].set('Select')
+            elif num == 5:
+                textbox.set('yyyy-mm-dd')
+            else:
+                textbox.set('')
+
+            num += 1
+        self.lblsave.configure(text= "hhhhhhhhhhh", text_color='green')
+    
+    def save(self):
+        # 
+        self.getDonorData()
+        self.getDiagnosisData()
+
+        Donordata = self.donorData
+        diagnosisData = self.diagnosisData
+        try:
+            regnumber =self.donationDB_hanler.saveDonor(Donordata,diagnosisData)
+
+            self.donorData = []
+            self.diagnosisData =[]
+
+            self.lblsave.configure(text= f"Record saved. \nDonor's Reg number is {regnumber}", text_color='green')
+        except Exception as erro:
+            self.lblsave.configure(text= f"{erro}", text_color='green')
 
     def Back(self):
         self.destroy()
@@ -269,11 +400,7 @@ class donation(customtkinter.CTk):
         app = main_Menu()
         app.mainloop()
 
-
-
-
-
-
 if __name__ == "__main__":
     app = donation()
     app.mainloop()
+
