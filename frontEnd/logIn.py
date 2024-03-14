@@ -65,7 +65,7 @@ class login(customtkinter.CTk):
             self.destroy()
             from mainMenu import main_Menu
             self.app = main_Menu()
-            self.app.tempUsername = username
+            
             self.app.mainloop()
         else:
             self.attempts -= 1
