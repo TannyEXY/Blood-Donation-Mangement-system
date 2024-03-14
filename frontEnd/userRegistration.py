@@ -14,6 +14,7 @@ class Registration(customtkinter.CTk):
         self.geometry("600x380")
         self.config(bg ="#161C25")
         self.resizable(False,False)
+        self.color = "#161C25"
         self.userDB = loginDB()
 
         self.font1 = ("Arial",20,'bold')
@@ -38,15 +39,15 @@ class Registration(customtkinter.CTk):
         self.passwordlabel = customtkinter.CTkLabel(self,font=self.font1,text="Password : ",bg_color="#161C25")
         self.passwordlabel.place(x=80,y=200)
 
-        self.usernameText = customtkinter.CTkEntry(self, width=250, height=30, corner_radius=12,
+        self.usernameText = customtkinter.CTkEntry(self, width=250, height=30, corner_radius=12,bg_color=self.color,
                                                    textvariable=self.username)
         self.usernameText.place(x= 230, y=150)
 
-        self.passwordText = customtkinter.CTkEntry(self, width=250, height=30, corner_radius=12,
+        self.passwordText = customtkinter.CTkEntry(self, width=250, height=30, corner_radius=12,bg_color=self.color,
                                                    textvariable=self.password,show = "*")
         self.passwordText.place(x= 230, y=200)
 
-        self.cpasswordText = customtkinter.CTkEntry(self, width=250, height=30, corner_radius=12,
+        self.cpasswordText = customtkinter.CTkEntry(self, width=250, height=30, corner_radius=12,bg_color=self.color,
                                                     textvariable=self.cpassword,show = "*")
         self.cpasswordText.place(x= 230, y=250)
 
@@ -54,11 +55,11 @@ class Registration(customtkinter.CTk):
         self.cpasswordlabel.place(x=80,y=250)     
 
 
-        self.loginbtn = customtkinter.CTkButton(self,text="Register",font=self.font3, width=100,border_color="#fff",
+        self.loginbtn = customtkinter.CTkButton(self,text="Register",font=self.font3, width=100,border_color="#fff",bg_color=self.color,
                                                 corner_radius=15, command=self.save)
         self.loginbtn.place(x=360,y= 320)
 
-        self.closebtn = customtkinter.CTkButton(self,text="Back",font=self.font3, width=100,border_color="#fff",
+        self.closebtn = customtkinter.CTkButton(self,text="Back",font=self.font3, width=100,border_color="#fff",bg_color=self.color,
                                                 corner_radius=15,command=self.close)
                                                 
         self.closebtn.place(x=240,y= 320)

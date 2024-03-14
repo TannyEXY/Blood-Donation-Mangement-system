@@ -16,6 +16,7 @@ class login(customtkinter.CTk):
         self.title("")
         self.geometry("500x350")
         self.config(bg="#161C25")
+        self.color = "#161C25"
         self.resizable(False, False)
         self.userDB = loginDB()
 
@@ -36,19 +37,19 @@ class login(customtkinter.CTk):
         self.passwordlabel = customtkinter.CTkLabel(self, font=self.font1, text="Password : ", bg_color="#161C25")
         self.passwordlabel.place(x=80, y=200)
 
-        self.usernameText = customtkinter.CTkEntry(self, width=250, height=30, corner_radius=12,
+        self.usernameText = customtkinter.CTkEntry(self, width=250, height=30, corner_radius=12,bg_color=self.color,
                                                    textvariable=self.username)
         self.usernameText.place(x=230, y=150)
 
-        self.passwordText = customtkinter.CTkEntry(self, width=250, height=30, corner_radius=12, show="*"
+        self.passwordText = customtkinter.CTkEntry(self, width=250, height=30, corner_radius=12, show="*",bg_color=self.color
                                                    , textvariable=self.password)
         self.passwordText.place(x=230, y=200)
 
-        self.loginbtn = customtkinter.CTkButton(self, text="log in", font=self.font3, width=100, border_color="#fff",
+        self.loginbtn = customtkinter.CTkButton(self, text="log in",bg_color=self.color, font=self.font3, width=100, border_color="#fff",
                                                 corner_radius=15, command=self.checkpassword)
         self.loginbtn.place(x=360, y=250)
 
-        self.closebtn = customtkinter.CTkButton(self, text="Close", font=self.font3, width=100, border_color="#fff",
+        self.closebtn = customtkinter.CTkButton(self, text="Close",bg_color=self.color, font=self.font3, width=100, border_color="#fff",
                                                 corner_radius=15, command=self.close)
 
         self.closebtn.place(x=240, y=250)
